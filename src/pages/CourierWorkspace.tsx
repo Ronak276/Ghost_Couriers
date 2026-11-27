@@ -326,8 +326,8 @@ export function CourierWorkspace() {
             {savedNotice && <p className="role-done-tag" role="status">{savedNotice}</p>}
             <Button type="submit">Save courier profile</Button>
           </form>
-          <Button asChild variant="outline" className="wide"><Link to="/preview/restaurant">Switch to Restaurant workspace</Link></Button>
-          <Button asChild className="wide"><Link to="/">Back to Customer app</Link></Button>
+          <Button asChild variant="outline" className="wide"><Link to="/restaurant">Switch to Restaurant workspace</Link></Button>
+          <Button asChild className="wide"><Link to="/customer">Back to Customer app</Link></Button>
         </>}
       </motion.div>
 

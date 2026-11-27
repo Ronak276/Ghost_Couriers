@@ -9,6 +9,8 @@ import { Orders } from '@/pages/Orders'
 import { Profile } from '@/pages/Profile'
 import { Restaurant, RestaurantItem } from '@/pages/Restaurant'
 import { RolePreview } from '@/pages/RolePreview'
+import { RestaurantWorkspace } from '@/pages/RestaurantWorkspace'
+import { CourierWorkspace } from '@/pages/CourierWorkspace'
 import { PhoneFrame } from '@/layouts/PhoneFrame'
 import { Splash, Welcome } from '@/pages/Welcome'
 function Screens() {
@@ -27,10 +29,15 @@ function Screens() {
   }, [navigate, starting])
   useEffect(() => { window.scrollTo(0, 0); document.querySelector('.phone-scroll')?.scrollTo(0, 0) }, [pathname])
   if (starting) return <Splash />
-  if (pathname === '/welcome' || (!onboarded && pathname === '/')) return <Welcome />
+  if (pathname === '/welcome' || (!onboarded && pathname === '/customer')) return <Welcome />
   return <Routes>
     <Route element={<AppLayout />}>
-      <Route index element={<Discovery home />} />
+      <Route index element={<Navigate to="/customer" replace />} />
+      <Route path="customer" element={<Discovery home />} />
+      <Route path="restaurant" element={<RestaurantWorkspace />} />
+      <Route path="courier" element={<CourierWorkspace />} />
+      <Route path="preview/restaurant" element={<Navigate to="/restaurant" replace />} />
+      <Route path="preview/courier" element={<Navigate to="/courier" replace />} />
       <Route path="explore" element={<Discovery />} />
       <Route path="restaurants/:id" element={<Restaurant />} />
       <Route path="restaurants/:id/items/:itemIndex" element={<RestaurantItem />} />
@@ -41,7 +48,7 @@ function Screens() {
       <Route path="profile" element={<Profile />} />
       <Route path="preview/:role" element={<RolePreview />} />
     </Route>
-    <Route path="*" element={<Navigate to="/" replace />} />
+    <Route path="*" element={<Navigate to="/customer" replace />} />
   </Routes>
 }
 export function App() {

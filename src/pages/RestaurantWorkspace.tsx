@@ -350,8 +350,8 @@ export function RestaurantWorkspace() {
               </select>
             </div>
           </div>
-          <Button asChild variant="outline" className="wide"><Link to="/preview/courier">Switch to Courier workspace</Link></Button>
-          <Button asChild className="wide"><Link to="/">Back to Customer app</Link></Button>
+          <Button asChild variant="outline" className="wide"><Link to="/courier">Switch to Courier workspace</Link></Button>
+          <Button asChild className="wide"><Link to="/customer">Back to Customer app</Link></Button>
         </>}
       </motion.div>
 

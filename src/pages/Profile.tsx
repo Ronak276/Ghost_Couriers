@@ -66,12 +66,12 @@ export function Profile() {
     <section className="profile-section" aria-labelledby="role-previews-heading">
       <h2 id="role-previews-heading" className="profile-section-title">Role previews</h2>
       <div className="profile-group">
-        <Link className="profile-row" to="/preview/restaurant">
+        <Link className="profile-row" to="/restaurant">
           <span className="profile-icon" aria-hidden="true"><LuStore /></span>
           <span className="profile-row-copy"><strong>Restaurant workspace</strong></span>
           <LuChevronRight className="profile-chevron" aria-hidden="true" />
         </Link>
-        <Link className="profile-row" to="/preview/courier">
+        <Link className="profile-row" to="/courier">
           <span className="profile-icon" aria-hidden="true"><LuBike /></span>
           <span className="profile-row-copy"><strong>Courier workspace</strong></span>
           <LuChevronRight className="profile-chevron" aria-hidden="true" />

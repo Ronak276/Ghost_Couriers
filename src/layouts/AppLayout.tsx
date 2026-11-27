@@ -1,5 +1,5 @@
 import { useEffect, useState } from 'react'
-import { matchPath, Link, NavLink, Outlet, useLocation, useNavigate, useSearchParams } from 'react-router-dom'
+import { matchPath, NavLink, Outlet, useLocation, useNavigate, useSearchParams } from 'react-router-dom'
 import { LuChevronDown, LuChevronLeft, LuCompass, LuHouse, LuMapPin, LuReceiptText, LuUserRound } from 'react-icons/lu'
 import { motion, useReducedMotion } from 'motion/react'
 import { HomeSearch } from '@/components/navigation/HomeSearch'
@@ -8,21 +8,21 @@ import { Button } from '@/components/ui/button'
 import { useDelivery } from '@/features/cart/store'
 import { AddressSheet } from './AddressSheet'
 const tabs = [
-  { to: '/', label: 'Home', Icon: LuHouse }, { to: '/explore', label: 'Explore', Icon: LuCompass },
+  { to: '/customer', label: 'Home', Icon: LuHouse }, { to: '/explore', label: 'Explore', Icon: LuCompass },
   { to: '/orders', label: 'Orders', Icon: LuReceiptText },
 ]
 export function AppLayout() {
   const { pathname } = useLocation()
   const navigate = useNavigate()
   const [params] = useSearchParams()
-  const home = pathname === '/'
+  const home = pathname === '/customer'
   const restaurantMenu = !!matchPath('/restaurants/:id', pathname)
   const restaurantItem = !!matchPath('/restaurants/:id/items/:itemIndex', pathname)
   const cartOrCheckout = pathname === '/cart' || pathname === '/checkout'
   const orderDetail = !!matchPath('/orders/:id', pathname)
   const ordersList = pathname === '/orders'
   const profilePage = pathname === '/profile'
-  const rolePreview = !!matchPath('/preview/:role', pathname)
+  const rolePreview = pathname === '/restaurant' || pathname === '/courier' || !!matchPath('/preview/:role', pathname)
   const fullBleedHero = restaurantMenu || restaurantItem || orderDetail
   const hideGlobalHeader = fullBleedHero || cartOrCheckout || ordersList || profilePage || rolePreview
   const showHero = home && !params.get('q')
@@ -51,7 +51,7 @@ export function AppLayout() {
     {!hideGlobalHeader && <header className={showHero ? "app-header home-header home-header-hero" : home ? "app-header home-header" : "app-header"}>
       <div className="header-inner">
         {!home &&
-          <Button variant="ghost" size="icon" aria-label="Go back" onClick={() => window.history.state?.idx > 0 ? navigate(-1) : navigate('/')}><LuChevronLeft /></Button>}
+          <Button variant="ghost" size="icon" aria-label="Go back" onClick={() => window.history.state?.idx > 0 ? navigate(-1) : navigate('/customer')}><LuChevronLeft /></Button>}
         <button className="address-trigger" onClick={() => setAddressOpen(true)}>
           <span className="pin"><LuMapPin /></span><span><small>Deliver to</small><strong>{address?.street || 'Denver, CO'}</strong></span><LuChevronDown size={14} />
         </button>

@@ -25,7 +25,7 @@ export function Welcome() {
     api.on('select', update)
     return () => { api.off('select', update) }
   }, [api])
-  const finish = () => { finishOnboarding(); navigate('/', { replace: true }) }
+  const finish = () => { finishOnboarding(); navigate('/customer', { replace: true }) }
   return <main className="welcome"><div className="welcome-shell">
     <div className="welcome-toolbar"><Button variant="outline" onClick={finish}>Skip</Button></div>
     <div className="carousel-viewport" ref={ref}><div className="carousel-track">
