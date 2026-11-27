@@ -44,7 +44,8 @@ export function AppLayout() {
       window.removeEventListener('scroll', onScroll)
     }
   }, [showHero])
-  const topLevel = pathname === '/profile' || tabs.some(tab => tab.to === pathname)
+  const showTabBar = tabs.some(tab => tab.to === pathname)
+  const topLevel = profilePage || showTabBar
   return <>
     {!hideGlobalHeader && <header className={showHero ? "app-header home-header home-header-hero" : home ? "app-header home-header" : "app-header"}>
       <div className="header-inner">
@@ -59,10 +60,10 @@ export function AppLayout() {
       {showHero && <MediaCarousel />}
     </header>}
     {showHero && heroScrolled && <div className="home-sticky-bar"><HomeSearch /></div>}
-    <motion.main key={pathname} className={restaurantItem ? "page restaurant-menu-page restaurant-item-page" : fullBleedHero ? "page restaurant-menu-page" : home ? "page home-page" : cartOrCheckout ? "page sub-page cart-page" : (ordersList || profilePage) ? "page orders-page" : topLevel ? "page" : "page sub-page"} initial={reducedMotion ? false : { opacity: 0, x: topLevel ? 0 : 12, y: topLevel ? 8 : 0 }} animate={{ opacity: 1, x: 0, y: 0 }} transition={{ duration: reducedMotion ? 0 : 0.26 }}>
+    <motion.main key={pathname} className={restaurantItem ? "page restaurant-menu-page restaurant-item-page" : fullBleedHero ? "page restaurant-menu-page" : home ? "page home-page" : cartOrCheckout ? "page sub-page cart-page" : ordersList ? "page orders-page" : profilePage ? "page sub-page" : topLevel ? "page" : "page sub-page"} initial={reducedMotion ? false : { opacity: 0, x: topLevel ? 0 : 12, y: topLevel ? 8 : 0 }} animate={{ opacity: 1, x: 0, y: 0 }} transition={{ duration: reducedMotion ? 0 : 0.26 }}>
       <Outlet context={{ openAddress: () => setAddressOpen(true) }} />
     </motion.main>
-    {topLevel && <nav className="tab-bar" aria-label="Main navigation">
+    {showTabBar && <nav className="tab-bar" aria-label="Main navigation">
       {tabs.map(({ to, label, Icon }) => <NavLink to={to} end key={to}>
         {({ isActive }) => <>{isActive && <motion.span className="active-tab" layoutId={reducedMotion ? undefined : 'active-tab'} transition={{ duration: 0.26 }} />}<Icon /><span>{label}</span></>}
       </NavLink>)}
