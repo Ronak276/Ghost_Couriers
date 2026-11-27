@@ -1,4 +1,4 @@
-import { useState } from 'react'
+import { useRef, useState, type PointerEvent } from 'react'
 import { Link, useSearchParams } from 'react-router-dom'
 import { LuArrowUpRight, LuBike, LuClock3, LuHeart, LuMapPin, LuSearch, LuSlidersHorizontal, LuStar } from 'react-icons/lu'
 import { Button } from '@/components/ui/button'
@@ -48,6 +48,56 @@ export function RestaurantCard({ restaurant, detailed = false, playing = false }
     <Button className={`favorite ${liked ? 'liked' : ''}`} variant="outline" size="icon" aria-label={`${liked ? 'Remove' : 'Save'} ${restaurant.name} favorite`} aria-pressed={liked} onClick={() => toggleFavorite(restaurant.id)}><LuHeart /></Button>
   </Card>
 }
+function useHorizontalSlide<T extends HTMLElement>() {
+  const ref = useRef<T>(null)
+  const [dragging, setDragging] = useState(false)
+  const drag = useRef<{ id: number; startX: number; startScroll: number; moved: boolean } | null>(null)
+  const suppressClick = useRef(false)
+
+  const onPointerDown = (event: PointerEvent<T>) => {
+    if (event.pointerType !== 'mouse' || event.button !== 0 || !ref.current) return
+    suppressClick.current = false
+    drag.current = { id: event.pointerId, startX: event.clientX, startScroll: ref.current.scrollLeft, moved: false }
+    setDragging(true)
+  }
+
+  const onPointerMove = (event: PointerEvent<T>) => {
+    const current = drag.current
+    const el = ref.current
+    if (!current || !el || current.id !== event.pointerId) return
+    const delta = event.clientX - current.startX
+    if (Math.abs(delta) > 6) {
+      current.moved = true
+      suppressClick.current = true
+    }
+    if (current.moved) el.scrollLeft = current.startScroll - delta
+  }
+
+  const endDrag = (event: PointerEvent<T>) => {
+    if (!drag.current || drag.current.id !== event.pointerId) return
+    drag.current = null
+    setDragging(false)
+  }
+
+  return {
+    ref,
+    'data-dragging': dragging,
+    onPointerDown,
+    onPointerMove,
+    onPointerUp: endDrag,
+    onPointerCancel: endDrag,
+    onDragStart: (event: React.DragEvent) => event.preventDefault(),
+    onMouseLeave: () => { drag.current = null; setDragging(false) },
+    onClickCapture: (event: React.MouseEvent) => {
+      if (suppressClick.current) {
+        event.preventDefault()
+        event.stopPropagation()
+        suppressClick.current = false
+      }
+    },
+  }
+}
+
 export function Discovery({ home = false }: { home?: boolean }) {
   const [params, setParams] = useSearchParams()
   const [playing, setPlaying] = useState(true)
@@ -65,16 +115,18 @@ export function Discovery({ home = false }: { home?: boolean }) {
   const results = restaurants.filter(restaurant => !hiddenRestaurants.includes(restaurant.id) && (cuisine === 'All' || restaurant.cuisine === cuisine)
     && (!showOpen || isOpen(restaurant)) && (!showSaved || favorites.includes(restaurant.id))
     && [restaurant.name, restaurant.description, ...restaurant.items.map(item => item.name)].some(name => name.toLowerCase().includes(query.trim().toLowerCase())))
-  const visibleRestaurants = recommended ? results.slice(0, 5) : results
+  const visibleRestaurants = recommended ? results.slice(0, 8) : results
+  const categorySlide = useHorizontalSlide<HTMLElement>()
+  const recommendedSlide = useHorizontalSlide<HTMLDivElement>()
   return <div className="discovery">
     {!home && <div className="discovery-head"><div><h1>Explore restaurants</h1><p>Browse menus and find something you’ll love.</p></div>
       <div className="search-row"><label className="search"><LuSearch /><Input aria-label="Search restaurants or dishes" value={query} onChange={event => filter('q', event.target.value)} placeholder="Search restaurants or dishes" /></label><Button variant="outline" size="icon" aria-label="Toggle Open now filter" aria-pressed={showOpen} className={showOpen ? 'selected' : ''} onClick={() => filter('open', showOpen ? '' : '1')}><LuSlidersHorizontal /></Button></div>
     </div>}
-    <section className="categories" aria-label="Cuisine categories">{cuisines.map(item => <button key={item.name} className={item.name === cuisine ? 'selected' : ''} aria-pressed={item.name === cuisine} onClick={() => filter('cuisine', item.name === 'All' ? '' : item.name)}><span><img src={media(item.image)} alt="" width={58} height={58} /></span>{item.name}</button>)}</section>
+    <section className="categories" aria-label="Cuisine categories" {...categorySlide}>{cuisines.map(item => <button key={item.name} className={item.name === cuisine ? 'selected' : ''} aria-pressed={item.name === cuisine} onClick={() => filter('cuisine', item.name === 'All' ? '' : item.name)}><span><img src={media(item.image)} alt="" width={58} height={58} draggable={false} /></span>{item.name}</button>)}</section>
     <section aria-labelledby="restaurants-title">
       <div className={recommended ? "section-heading recommended-heading" : "section-heading"}><div><h2 id="restaurants-title">{recommended ? 'Recommended' : 'Restaurants'}</h2>{!recommended && <p>{results.length} Denver {results.length === 1 ? 'restaurant' : 'restaurants'}</p>}</div>
         {recommended ? <Button asChild variant="outline"><Link to="/explore">See all</Link></Button> : <div className="filters"><Button variant="outline" aria-pressed={showOpen} className={showOpen ? 'selected' : ''} onClick={() => filter('open', showOpen ? '' : '1')}>Open now</Button><Button variant="outline" aria-pressed={showSaved} className={showSaved ? 'selected' : ''} onClick={() => filter('saved', showSaved ? '' : '1')}><LuHeart /> Saved</Button></div>}</div>
-      {visibleRestaurants.length ? <div className={recommended ? "restaurant-grid recommended-grid" : "restaurant-grid"} tabIndex={recommended ? 0 : undefined} role={recommended ? "region" : undefined} aria-label={recommended ? "Scroll recommended restaurants" : undefined}>{visibleRestaurants.map(restaurant => <RestaurantCard key={restaurant.id} restaurant={restaurant} />)}</div> : <div className="empty"><LuSearch /><h3>No restaurants found</h3><Button variant="outline" onClick={() => setParams({})}>Clear filters</Button></div>}
+      {visibleRestaurants.length ? <div className={recommended ? "restaurant-grid recommended-grid" : "restaurant-grid"} tabIndex={recommended ? 0 : undefined} role={recommended ? "region" : undefined} aria-label={recommended ? "Scroll recommended restaurants" : undefined} {...(recommended ? recommendedSlide : {})}>{visibleRestaurants.map(restaurant => <RestaurantCard key={restaurant.id} restaurant={restaurant} />)}</div> : <div className="empty"><LuSearch /><h3>No restaurants found</h3><Button variant="outline" onClick={() => setParams({})}>Clear filters</Button></div>}
     </section>
     {recommended && <section aria-labelledby="all-restaurants-title">
       <div className="section-heading"><div><h2 id="all-restaurants-title">All restaurants</h2><p>Sample ratings, distances and offers</p></div>

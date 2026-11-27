@@ -72,7 +72,8 @@ button svg,a svg{flex:none}
 .carousel-dots button[aria-pressed=true]::before{width:19px;background:white}
 .carousel-arrows{padding:2px;border:1px solid #ffffff40;background:#17100db0;border-radius:40px;backdrop-filter:blur(8px)}
 .carousel-arrows .button{color:white;width:40px;min-height:40px}
-.categories{display:flex;gap:10px;padding:4px 4px 9px;overflow-x:auto;scrollbar-width:none;scroll-snap-type:x proximity}
+.categories{display:flex;gap:10px;padding:4px 4px 9px;overflow-x:auto;scrollbar-width:none;scroll-snap-type:x proximity;cursor:grab;user-select:none}
+.categories[data-dragging=true],.recommended-grid[data-dragging=true]{cursor:grabbing;scroll-snap-type:none}
 .categories::-webkit-scrollbar{display:none}
 .categories button{display:grid;flex:0 0 76px;justify-items:center;align-content:start;gap:7px;font-size:.8rem;font-weight:650;line-height:1.15;white-space:nowrap;scroll-snap-align:start}
 .categories button span{display:grid;place-items:center;width:58px;aspect-ratio:1;border:1px solid var(--line);background:#fff;border-radius:50%;overflow:hidden;transition:transform var(--fast),background var(--fast)}
@@ -288,7 +289,7 @@ input[type=checkbox],input[type=radio]{accent-color:var(--orange)}
  display:grid;grid-template-columns:none;grid-template-rows:repeat(2,auto);
  grid-auto-flow:column;grid-auto-columns:calc((100% - 29px)/2);
  gap:10px;overflow-x:auto;padding:3px 3px 8px;
- scroll-snap-type:x proximity;scroll-padding-inline:3px;scrollbar-width:none;
+ scroll-snap-type:x proximity;scroll-padding-inline:3px;scrollbar-width:none;cursor:grab;user-select:none;
 }
 .recommended-grid::-webkit-scrollbar{display:none}
 .recommended-grid .restaurant-card{scroll-snap-align:start}
