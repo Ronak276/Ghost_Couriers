@@ -14,23 +14,6 @@ const statuses = [
 
 const date = (timestamp: number) => new Intl.DateTimeFormat('en-US', { dateStyle: 'medium', timeStyle: 'short', timeZone: 'America/Denver' }).format(timestamp)
 
-function RiderOnBikeIcon() {
-  return (
-    <svg viewBox="0 0 48 48" width="28" height="28" fill="none" aria-hidden="true">
-      {/* Rear & front wheels */}
-      <circle cx="13" cy="34" r="6" stroke="currentColor" strokeWidth="3" fill="#fff" />
-      <circle cx="36" cy="34" r="6" stroke="currentColor" strokeWidth="3" fill="#fff" />
-      {/* Scooter frame & delivery box */}
-      <path d="M13 34L19 23H28L33 34M28 23L31 15H35" stroke="currentColor" strokeWidth="3" strokeLinecap="round" strokeLinejoin="round" />
-      <rect x="7" y="18" width="10" height="9" rx="2" fill="currentColor" />
-      {/* Rider seated on bike with helmet */}
-      <circle cx="24" cy="11" r="4" fill="currentColor" />
-      <path d="M21 16C21 16 25 16 27 20L30 22" stroke="currentColor" strokeWidth="3.2" strokeLinecap="round" strokeLinejoin="round" />
-      <path d="M22 17L20 26L25 29" stroke="currentColor" strokeWidth="3.2" strokeLinecap="round" strokeLinejoin="round" />
-    </svg>
-  )
-}
-
 function LiveTrackingMap({ progress, restaurantName, address, active }: { progress: number; restaurantName: string; address: string; active: boolean }) {
   const waypoints = [
     { x: 64, y: 178 },
@@ -71,8 +54,10 @@ function LiveTrackingMap({ progress, restaurantName, address, active }: { progre
 
       <div className={`map-rider ${active ? 'riding' : ''}`} style={{ left: `${(riderX / 400) * 100}%`, top: `${(riderY / 240) * 100}%` }}>
         {active && <span className="map-rider-pulse" aria-hidden="true" />}
-        <span className="map-rider-badge"><RiderOnBikeIcon /></span>
+        <img className="map-rider-img" src="/media/ghost-rider.png" alt="Ghost Couriers rider" />
+        <span className="map-rider-tag">Ghost Couriers</span>
       </div>
+      <a className="map-open-link" href={`https://www.google.com/maps/dir/?api=1&destination=${mapQuery}`} target="_blank" rel="noreferrer">Open in Maps</a>
     </div>
   )
 }
@@ -141,7 +126,7 @@ export function Orders({ detail = false }: { detail?: boolean }) {
           </div>
 
           <div className="order-rider-card">
-            <span className="order-rider-avatar" aria-hidden="true"><RiderOnBikeIcon /></span>
+            <img className="order-rider-photo" src="/media/ghost-rider.png" alt="" />
             <div className="order-rider-info">
               <strong>Alex M. · Delivery Partner</strong>
               <small><LuStar className="rider-star" /> 4.9 · {currentStep >= 2 ? 'On the way on bike' : 'Assigned to your order'}</small>

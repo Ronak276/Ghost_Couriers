@@ -76,11 +76,10 @@ export function Profile() {
           <span className="profile-row-copy"><strong>Courier workspace</strong></span>
           <LuChevronRight className="profile-chevron" aria-hidden="true" />
         </Link>
-        <Link className="profile-row" to="/preview/operations">
+        <div className="profile-row profile-row-disabled" aria-disabled="true">
           <span className="profile-icon" aria-hidden="true"><LuLayoutGrid /></span>
-          <span className="profile-row-copy"><strong>Operations workspace</strong></span>
-          <LuChevronRight className="profile-chevron" aria-hidden="true" />
-        </Link>
+          <span className="profile-row-copy"><strong>Operations workspace</strong><small>Disabled in demo</small></span>
+        </div>
       </div>
     </section>
 

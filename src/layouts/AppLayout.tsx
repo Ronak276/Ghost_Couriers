@@ -22,8 +22,9 @@ export function AppLayout() {
   const orderDetail = !!matchPath('/orders/:id', pathname)
   const ordersList = pathname === '/orders'
   const profilePage = pathname === '/profile'
+  const rolePreview = !!matchPath('/preview/:role', pathname)
   const fullBleedHero = restaurantMenu || restaurantItem || orderDetail
-  const hideGlobalHeader = fullBleedHero || cartOrCheckout || ordersList || profilePage
+  const hideGlobalHeader = fullBleedHero || cartOrCheckout || ordersList || profilePage || rolePreview
   const showHero = home && !params.get('q')
   const reducedMotion = useReducedMotion()
   const { address } = useDelivery()
@@ -33,7 +34,7 @@ export function AppLayout() {
     if (!showHero) { setHeroScrolled(false); return }
     const scroller = document.querySelector('.phone-scroll')
     const onScroll = () => {
-      const top = scroller ? scroller.scrollTop : window.scrollY
+      const top = Math.max(scroller?.scrollTop ?? 0, window.scrollY, document.documentElement.scrollTop)
       setHeroScrolled(top > 130)
     }
     onScroll()
@@ -60,7 +61,7 @@ export function AppLayout() {
       {showHero && <MediaCarousel />}
     </header>}
     {showHero && heroScrolled && <div className="home-sticky-bar"><HomeSearch /></div>}
-    <motion.main key={pathname} className={restaurantItem ? "page restaurant-menu-page restaurant-item-page" : fullBleedHero ? "page restaurant-menu-page" : home ? "page home-page" : cartOrCheckout ? "page sub-page cart-page" : ordersList ? "page orders-page" : profilePage ? "page sub-page" : topLevel ? "page" : "page sub-page"} initial={reducedMotion ? false : { opacity: 0, x: topLevel ? 0 : 12, y: topLevel ? 8 : 0 }} animate={{ opacity: 1, x: 0, y: 0 }} transition={{ duration: reducedMotion ? 0 : 0.26 }}>
+    <motion.main key={pathname} className={restaurantItem ? "page restaurant-menu-page restaurant-item-page" : fullBleedHero ? "page restaurant-menu-page" : home ? "page home-page" : rolePreview ? "page role-page" : cartOrCheckout ? "page sub-page cart-page" : ordersList ? "page orders-page" : profilePage ? "page sub-page" : topLevel ? "page" : "page sub-page"} initial={reducedMotion ? false : { opacity: 0, x: topLevel ? 0 : 12, y: topLevel ? 8 : 0 }} animate={{ opacity: 1, x: 0, y: 0 }} transition={{ duration: reducedMotion ? 0 : 0.26 }}>
       <Outlet context={{ openAddress: () => setAddressOpen(true) }} />
     </motion.main>
     {showTabBar && <nav className="tab-bar" aria-label="Main navigation">

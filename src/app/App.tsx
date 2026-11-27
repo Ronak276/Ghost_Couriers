@@ -16,7 +16,7 @@ function Screens() {
   const { pathname } = useLocation()
   const navigate = useNavigate()
   const [starting, setStarting] = useState(() => pathname === '/' ||
-    (performance.getEntriesByType('navigation')[0] as PerformanceNavigationTiming | undefined)?.type === 'reload')
+    (pathname === '/welcome' && (performance.getEntriesByType('navigation')[0] as PerformanceNavigationTiming | undefined)?.type === 'reload'))
   useEffect(() => {
     if (!starting) return
     const timer = window.setTimeout(() => {
