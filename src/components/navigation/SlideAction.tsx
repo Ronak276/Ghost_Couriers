@@ -11,9 +11,7 @@ export function SlideAction({ label, onAdvance }: { label: string; onAdvance: ()
   function start(event: PointerEvent<HTMLButtonElement>) {
     if (gesture.current || !event.isPrimary || event.button !== 0) return
     suppressClick.current = false
-    if (!(event.target instanceof Element) || !event.target.closest('.welcome-cta-icon')) return
-    const distance = event.currentTarget.clientWidth - 45
-    if (distance <= 0) return
+    const distance = Math.max(1, event.currentTarget.clientWidth - 58)
     gesture.current = { id: event.pointerId, start: event.clientX, distance }
     event.currentTarget.setPointerCapture(event.pointerId)
     setDragging(true)
@@ -35,7 +33,7 @@ export function SlideAction({ label, onAdvance }: { label: string; onAdvance: ()
     setOffset(0)
     const delta = event.clientX - drag.start
     suppressClick.current ||= Math.abs(delta) > 6
-    if (complete && delta >= drag.distance * 0.65) onAdvance()
+    if (complete && delta >= drag.distance * 0.5) onAdvance()
   }
 
   return <Button

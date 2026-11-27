@@ -231,7 +231,7 @@ input[type=checkbox],input[type=radio]{accent-color:var(--orange)}
 @media(min-width:650px){
  .phone-frame .welcome-slide{height:calc(min(877px,100dvh - 36px) - 12px);min-height:0}
 }
-.welcome-continue{touch-action:pan-y;user-select:none}
+.welcome-continue{touch-action:none;user-select:none;overflow:hidden}
 .welcome-continue .welcome-cta-icon{cursor:grab;z-index:1;transition:transform var(--normal)}
 .welcome-continue[data-dragging=true]{transform:none}
 .welcome-continue[data-dragging=true] .welcome-cta-icon{cursor:grabbing;transition:none}

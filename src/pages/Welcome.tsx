@@ -8,8 +8,6 @@ import { useDelivery } from '@/features/cart/store'
 import { media } from '@/features/catalog/catalog'
 const steps = [
   { title: 'Your favorite Denver bites, delivered.', detail: 'Find local favorites and get your next meal delivered to your door.', image: 'welcome-burger' },
-  { title: 'Make it yours.', detail: 'Customize your favorites and order whatever you’re craving.', image: 'poke' },
-  { title: 'Dinner’s on the way.', detail: 'Follow your delivery from the kitchen to your door.', image: 'courier' },
 ]
 export function Splash() {
   const reduce = useReducedMotion()
@@ -35,7 +33,7 @@ export function Welcome() {
         <img src={media(step.image)} alt="" /><div className="welcome-copy"><h1>{step.title}</h1><p>{step.detail}</p></div>
       </div>)}
     </div></div>
-    <div className="welcome-footer"><div className="carousel-dots">{steps.map((step, index) => <button type="button" key={step.title} aria-label={`Go to onboarding step ${index + 1}`} aria-pressed={index === active} onClick={() => api?.scrollTo(index, !!reduced)} />)}</div>
-      <SlideAction label={active === 1 ? 'Continue' : 'Get Started'} onAdvance={() => active === steps.length - 1 ? finish() : api?.scrollNext(!!reduced)} /></div>
+    <div className="welcome-footer">{steps.length > 1 && <div className="carousel-dots">{steps.map((step, index) => <button type="button" key={step.title} aria-label={`Go to onboarding step ${index + 1}`} aria-pressed={index === active} onClick={() => api?.scrollTo(index, !!reduced)} />)}</div>}
+      <SlideAction label="Get Started" onAdvance={() => active === steps.length - 1 ? finish() : api?.scrollNext(!!reduced)} /></div>
   </div></main>
 }
