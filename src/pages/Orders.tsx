@@ -55,7 +55,6 @@ function LiveTrackingMap({ progress, restaurantName, address, active }: { progre
       <div className={`map-rider ${active ? 'riding' : ''}`} style={{ left: `${(riderX / 400) * 100}%`, top: `${(riderY / 240) * 100}%` }}>
         {active && <span className="map-rider-pulse" aria-hidden="true" />}
         <img className="map-rider-img" src="/media/ghost-rider.png" alt="Ghost Couriers rider" />
-        <span className="map-rider-tag">Ghost Couriers</span>
       </div>
       <a className="map-open-link" href={`https://www.google.com/maps/dir/?api=1&destination=${mapQuery}`} target="_blank" rel="noreferrer">Open in Maps</a>
     </div>

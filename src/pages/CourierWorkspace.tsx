@@ -216,7 +216,6 @@ export function CourierWorkspace() {
               <div className="map-rider riding" style={riderCoords}>
                 <span className="map-rider-pulse" aria-hidden="true" />
                 <img className="map-rider-img" src="/media/ghost-rider.png" alt="Ghost Couriers rider" />
-                <span className="map-rider-tag">Ghost Couriers</span>
               </div>
               <a className="map-open-link" href={`https://www.google.com/maps/dir/?api=1&destination=${encodeURIComponent(fullAddress + ', USA')}`} target="_blank" rel="noreferrer">Navigate</a>
             </div>
